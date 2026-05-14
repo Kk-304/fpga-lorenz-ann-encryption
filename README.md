@@ -20,7 +20,7 @@ This project replaces RK4 with a tiny **3-5-3 feedforward ANN** that learns the 
 ## ✨ Key Features
 
 - 🧠 **ANN-Driven Lorenz Generator** — 3-5-3 network trained via Keras Tuner
-- ⚡ **Combinational Verilog** — Q?.20 fixed-point, hardcoded weights/biases, no clock
+- ⚡ **Combinational Verilog** — Q4.20 fixed-point, hardcoded weights/biases, no clock
 - 🔐 **Two-Stage Encryption** — Arnold Cat Map (10 iterations) + XOR diffusion
 - 📉 **Low Hardware Footprint** — ~1604 slice LUTs (~1.19% utilization)
 - 🔁 **Verified Lossless Decryption** — `np.array_equal(original, decrypted) == True`
@@ -85,7 +85,7 @@ The `Lorentz` module is a single-cycle combinational realization of the trained 
 
 | Property | Value |
 |---|---|
-| Format | 24-bit signed fixed-point, `SHIFT = 20` (Q3.20 layout) |
+| Format | 24-bit signed fixed-point, `SHIFT = 20` (Q4.20 layout) |
 | Architecture | 3 inputs → 5 ReLU hidden → 3 linear outputs |
 | Multiplier | `qmul` helper (48-bit intermediate, arithmetic shift right by 20) |
 | Clocking | Combinational only (`assign` statements) |
@@ -97,7 +97,7 @@ The testbench reads `+x`, `+y`, `+z` as Verilog plusargs and prints the resultin
 # Compile (Icarus Verilog)
 iverilog -o Lorentz_TB "Lorentz Verilog code/Lorentz.v" "Lorentz Verilog code/Lorentz_tb.v"
 
-# Run one step (values are Q?.20 fixed-point integers, e.g. 0.1 ≈ 104857)
+# Run one step (values are Q4.20 fixed-point integers, e.g. 0.1 ≈ 104857)
 vvp Lorentz_TB +x=104857 +y=104857 +z=104857
 ```
 
@@ -169,13 +169,15 @@ Significantly lower footprint than RK4-based and other FPGA chaotic encryption d
 
 ### ⚠️ Path Configuration
 The notebooks currently contain hard-coded Windows paths, e.g.
-os.chdir("E:\\Python n Verilog\\Lorentz 2 and Encryption\\Lorentz Verilog code")
-Update these os.chdir(...) lines to point at your local copy of the repo before running. The image encryption notebook also expects:
+`os.chdir("E:\\Python n Verilog\\Lorentz 2 and Encryption\\Lorentz Verilog code")`
+Update these `os.chdir(...)` lines to point at your local copy of the repo before running. The image encryption notebook also expects:
 
-a lorentz_model.keras file (the saved Keras model — exported from Lorentz - 2.ipynb)
-an Example Images/ folder with a Capybara.png (or other) input image
+- a `lorentz_model.keras` file (the saved Keras model — exported from `Lorentz - 2.ipynb`)
+- an `Example Images/` folder with a `Capybara.png` (or other) input image
 
 Both are user-supplied — they are not committed to the repo.
+
+---
 
 ## 🔑 Advantages
 
