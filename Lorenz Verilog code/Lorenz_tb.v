@@ -1,6 +1,6 @@
 `timescale 1ns/1ps
 
-module Lorentz_tb;
+module Lorenz_tb;
 
 reg signed [23:0] x0;
 reg signed [23:0] x1;
