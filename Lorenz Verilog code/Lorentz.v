@@ -1,4 +1,4 @@
-module Lorentz(
+module Lorenz(
 
     input  signed [23:0] x0,
     input  signed [23:0] x1,
